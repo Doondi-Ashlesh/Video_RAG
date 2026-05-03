@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual envs
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Local artefacts that should be re-derived, not committed
+chroma_db/
+
+# DO commit the bundled tarball of chroma_db — Spaces needs it on cold start.
+# (chroma_db.tar.gz is intentionally NOT in this list)
+
+# Editor / OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Claude Code session data — not for public repo
+.claude/
+
+# Local artefacts the public repo shouldn't ship
+__pycache__/
+*.pyc
+.hypothesis/

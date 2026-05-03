@@ -1,0 +1,29 @@
+# Core — LLM is NVIDIA NIM (Nemotron Super, free hosted endpoint, OpenAI-compatible)
+openai>=1.30.0
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+loguru>=0.7.2
+python-dotenv>=1.0.0
+
+# Transcript + metadata
+youtube-transcript-api>=0.6.2
+yt-dlp>=2024.4.9
+
+# Embeddings + reranking
+sentence-transformers>=2.7.0
+torch>=2.2.0
+
+# Vector DB
+chromadb>=0.5.0
+
+# CLI
+typer>=0.25.0
+rich>=13.7.0
+
+# Web UI for Hugging Face Spaces deployment
+gradio==4.36.0
+huggingface_hub<0.26
+
+# Tests
+pytest>=8.0.0
+pytest-mock>=3.12.0
