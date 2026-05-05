@@ -1,4 +1,4 @@
-# Video RAG — Lecture Q&A
+# Video RAG 
 
 Ask any question about a recorded lecture; get a grounded explanation
 **plus** a YouTube player embedded at the exact moment of the lecture that
