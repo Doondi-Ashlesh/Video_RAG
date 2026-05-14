@@ -77,6 +77,49 @@ state in seconds; for your own lectures, run `python -m scripts.ingest_video`.
 
 ---
 
+## v2 Enhancements
+
+Additions on top of the original MVP spec.
+
+### Retrieval
+- Lecturer-domain filter schema (`course_id` / `instructor` / `lecture_number` / `topic`) replaces the original generic `channel_name` / `topic_category`.
+- Schema-aware QAM prompt — the LLM only emits filter fields the index actually supports.
+- Index-driven canonicalisation — partial values like `"Strang"` resolve to `"Gilbert Strang"` before ChromaDB ever sees the filter.
+- Top-3 multi-chunk answer synthesis — broad queries pull context from several moments at once.
+
+### URL precision
+- Sentence-level anchor: a second cross-encoder pass over ~15s sub-chunks inside the winning chunk so the URL lands on the actual sentence, not the chunk boundary.
+- Padded playback window — the end timestamp extends forward so the student always gets ≥30s of context.
+- `&end=` on the embed URL so the YouTube player auto-stops at the chunk boundary.
+
+### YouTube chapter awareness (biggest single win)
+- Chapter markers extracted at ingest (via yt-dlp); each chunk tagged with the chapter it falls in.
+- Chapter-restricted vector search when the QAM topic matches one or more chapter titles.
+- LLM chapter picker (reasoning mode ON) disambiguates titles — "Linear Regression Algorithm" beats "Motivate Linear Regression" without any hardcoded word lists.
+- Chapter boundaries become the URL window when a chapter match fires.
+
+### Chunking
+- 90s chunks with 20s overlap (up from 45s/10s) — deep-explanation chunks now compete fairly with announcement chunks during rerank.
+- Per-chunk segment list JSON-serialised in ChromaDB metadata for the sentence anchor (no transcript re-fetch at query time).
+
+### UX
+- Embedded YouTube player at the snippet timestamp; thumbnail-with-overlay fallback for videos whose owners disable iframe embedding.
+- Secondary clips listed below the primary (top-2 alternate chunks, each with its own anchored window).
+- `[!] Low-confidence match` flag when the rerank score falls below threshold.
+- Debug accordion exposes QAM filters, semantic element, chosen chunk, and scores for full architectural transparency.
+
+### Deployment
+- One-command Hugging Face Spaces recipe (Gradio SDK, free CPU tier).
+- Bundled corpus (`chroma_db.tar.gz`) extracted on cold start — no first-run re-ingest needed.
+- HF log streamer (`scripts/space_logs.py`) pulls build + runtime logs via the Spaces API for debugging.
+
+### Robustness
+- Strict grounding — answer LLM explicitly forbidden from emitting "general explanation" addendums or using prior knowledge.
+- Cascading fallbacks at every stage (cross-encoder → cosine, sentence anchor → chunk, filter → unfiltered, QAM → raw query, answer LLM → raw chunk).
+- Cross-version `youtube-transcript-api` support (works on both 0.6.x and 1.x).
+
+---
+
 ## Key features
 
 ### Retrieval pipeline
