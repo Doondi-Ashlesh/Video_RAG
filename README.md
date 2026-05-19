@@ -2,7 +2,7 @@
 
 Ask any question about a recorded lecture; get a grounded explanation
 **plus** a YouTube player embedded at the exact moment of the lecture that
-answers it.
+answers it. Version 2 updates in progress!
 
 > 🚀 **Live demo:** https://huggingface.co/spaces/DoondiAshlesh/V_RAG
 
